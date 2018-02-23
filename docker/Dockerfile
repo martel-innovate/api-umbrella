@@ -1,14 +1,18 @@
-FROM ubuntu:xenial
+FROM debian:jessie
 
-ENV API_UMBRELLA_VERSION 0.14.4-1~xenial
+ENV API_UMBRELLA_VERSION 0.14.4-1~jessie
 
 # Install API Umbrella
-RUN apt-get update && apt-get -y install wget
-RUN apt-get -y install wget libffi6 libyaml-0-2 logrotate curl libxml2 tcl openjdk-8-jre-headless libcurl3 psmisc perl
-RUN wget https://github.com/martel-innovate/api-umbrella/releases/download/v0.14.4-fiware/api-umbrella_0.14.4-1.xenial_amd64.deb
-RUN dpkg -i api-umbrella_0.14.4-1.xenial_amd64.deb
-RUN apt-get -y -f install
-
+RUN apt-get update && apt-get install -y --no-install-recommends curl libyaml-0-2 logrotate libxml2 \
+  tcl psmisc perl default-jre-headless openjdk-7-jre-headless ca-certificates-java \
+  && curl -L https://github.com/martel-innovate/api-umbrella/releases/download/v0.14.4-fiware/api-umbrella_0.14.4-1.jessie_amd64.deb -o api-umbrella_0.14.4-1.jessie_amd64.deb \
+  && dpkg -i api-umbrella_0.14.4-1.jessie_amd64.deb \
+  && rm -rf /var/cache/apt/archives \
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get autoremove -y \
+  && chmod 775 -R /opt/api-umbrella \
+  && chmod 775 -R /etc/api-umbrella  \
+  && rm -rf api-umbrella_0.14.4-1.jessie_amd64.deb
 
 # Define mountable directories
 VOLUME ["/etc/api-umbrella", "/opt/api-umbrella/var/db", "/opt/api-umbrella/var/log"]
