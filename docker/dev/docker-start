@@ -21,6 +21,8 @@ ln -snf /build/test/tmp/run ./test/tmp/run
 
 (cd /build && env PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" make)
 
+mkdir -p /app/src/api-umbrella/admin-ui/tmp
+
 chmod 1777 /app/src/api-umbrella/admin-ui/tmp
 
 api-umbrella run
